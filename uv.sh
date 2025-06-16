@@ -182,6 +182,149 @@ migration_status() {
     docker exec $DIRECTUS_CONTAINER npx directus database migrate:status
 }
 
+# Reset operations
+reset_database() {
+    log_warning "⚠️  This will completely reset the database and all data will be lost!"
+    log_warning "Are you sure you want to continue? Type 'RESET' to confirm:"
+    read -r response
+    
+    if [ "$response" = "RESET" ]; then
+        log_info "Stopping services..."
+        docker compose down
+        
+        log_info "Removing database volume..."
+        docker volume rm ${PROJECT_NAME}_database_data 2>/dev/null || true
+        rm -rf data/database/* 2>/dev/null || true
+        
+        log_info "Starting services..."
+        docker compose up -d database cache
+        
+        log_info "Waiting for database to be ready..."
+        sleep 10
+        
+        log_info "Starting Directus..."
+        docker compose up -d directus
+        
+        log_success "Database reset complete! Use 'uv bootstrap' to initialize."
+    else
+        log_info "Database reset cancelled"
+    fi
+}
+
+reset_uploads() {
+    log_warning "⚠️  This will delete all uploaded files!"
+    log_warning "Are you sure? (y/N)"
+    read -r response
+    
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        log_info "Removing uploads..."
+        rm -rf uploads/*
+        mkdir -p uploads
+        log_success "Uploads directory reset"
+    else
+        log_info "Upload reset cancelled"
+    fi
+}
+
+reset_schema() {
+    log_warning "⚠️  This will reset the database schema but keep the data structure!"
+    log_warning "Are you sure? (y/N)"
+    read -r response
+    
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        log_info "Dropping and recreating database..."
+        docker exec $DATABASE_CONTAINER psql -U directus -c "DROP DATABASE IF EXISTS directus;"
+        docker exec $DATABASE_CONTAINER psql -U directus -c "CREATE DATABASE directus;"
+        
+        log_info "Restarting Directus..."
+        docker compose restart directus
+        
+        log_success "Schema reset complete! Use 'uv bootstrap' to initialize."
+    else
+        log_info "Schema reset cancelled"
+    fi
+}
+
+reset_all() {
+    log_warning "🚨 COMPLETE RESET - This will:"
+    log_warning "   • Delete all database data"
+    log_warning "   • Remove all uploaded files" 
+    log_warning "   • Reset all volumes"
+    log_warning "   • Remove all containers"
+    echo ""
+    log_warning "Type 'RESET-ALL' to confirm complete reset:"
+    read -r response
+    
+    if [ "$response" = "RESET-ALL" ]; then
+        log_info "Stopping all services..."
+        docker compose down -v
+        
+        log_info "Removing all volumes..."
+        docker volume prune -f
+        
+        log_info "Removing uploads..."
+        rm -rf uploads/*
+        mkdir -p uploads
+        
+        log_info "Removing database data..."
+        rm -rf data/database/*
+        
+        log_info "Removing cache data..."
+        rm -rf data/minio/*
+        
+        log_info "Creating fresh directories..."
+        mkdir -p {data/database,data/minio,uploads,backups}
+        
+        log_info "Starting services..."
+        docker compose up -d
+        
+        log_success "Complete reset finished! Use 'uv bootstrap' to initialize."
+        log_info "Default credentials: admin@urbanvision.com / urbanvision123"
+    else
+        log_info "Complete reset cancelled"
+    fi
+}
+
+# Development helpers
+fresh_start() {
+    log_info "Starting fresh development environment..."
+    
+    # Create backup if database exists
+    if docker exec $DATABASE_CONTAINER pg_isready -U directus >/dev/null 2>&1; then
+        log_info "Creating backup before fresh start..."
+        db_backup
+    fi
+    
+    # Reset everything
+    reset_all
+    
+    # Wait a bit for services to start
+    log_info "Waiting for services to initialize..."
+    sleep 15
+    
+    # Bootstrap
+    bootstrap
+    
+    log_success "Fresh environment ready!"
+    access
+}
+
+# Quick reset for development (keeps backups)
+dev_reset() {
+    log_info "Quick development reset (keeps backups)..."
+    
+    # Backup current state
+    db_backup
+    
+    # Reset database only
+    reset_database
+    
+    # Bootstrap
+    bootstrap
+    
+    log_success "Development environment reset complete!"
+}
+
 # Show access points
 access() {
     echo ""
@@ -223,8 +366,16 @@ help() {
     echo ""
     echo "Migration Management:"
     echo "  migration-create <name>  Create new migration"
-    echo "  migration-run           Run pending migrations"
-    echo "  migration-status        Show migration status"
+    echo "  migration-run            Run pending migrations"
+    echo "  migration-status         Show migration status"
+    echo ""
+    echo "Reset Operations:"
+    echo "  reset-database     Reset database (removes all data)"
+    echo "  reset-uploads      Reset uploads directory"
+    echo "  reset-schema       Reset database schema only"
+    echo "  reset-all          Complete reset (database + uploads + volumes)"
+    echo "  fresh-start        Complete reset + bootstrap (with backup)"
+    echo "  dev-reset          Quick development reset (backup + reset + bootstrap)"
     echo ""
     echo "Information:"
     echo "  access             Show all access points and credentials"
@@ -234,8 +385,9 @@ help() {
     echo "  $0 start                           # Start all services"
     echo "  $0 logs directus                   # Show Directus logs"
     echo "  $0 db-backup                       # Backup database"
-    echo "  $0 schema-export                   # Export current schema"
-    echo "  $0 migration-create add_contracts  # Create new migration"
+    echo "  $0 fresh-start                     # Complete fresh start"
+    echo "  $0 dev-reset                       # Quick development reset"
+    echo "  $0 reset-database                  # Reset database only"
     echo ""
 }
 
@@ -279,6 +431,24 @@ case "${1:-help}" in
         ;;
     migration-status)
         migration_status
+        ;;
+    reset-database)
+        reset_database
+        ;;
+    reset-uploads)
+        reset_uploads
+        ;;
+    reset-schema)
+        reset_schema
+        ;;
+    reset-all)
+        reset_all
+        ;;
+    fresh-start)
+        fresh_start
+        ;;
+    dev-reset)
+        dev_reset
         ;;
     access)
         access

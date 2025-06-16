@@ -85,7 +85,9 @@ Visit http://localhost:8055 and login with:
 urban-vision-erp/
 ├── docker-compose.yml          # Main Docker Compose configuration
 ├── README.md                   # This file
-├── data/                       # Persistent data (auto-created)
+├── RESET_GUIDE.md             # Comprehensive reset operations guide
+├── uv.sh                      # Development helper script
+├── data/                      # Persistent data (auto-created)
 │   ├── database/              # PostgreSQL data
 │   └── minio/                 # MinIO data
 ├── uploads/                   # Directus file uploads
@@ -94,6 +96,64 @@ urban-vision-erp/
 ├── migrations/                # Database migrations
 └── backups/                   # Database backups
 ```
+
+## ⚡ Development Helper Script
+
+We've included a powerful `uv.sh` script that simplifies common development tasks:
+
+### Quick Commands
+```bash
+# Make script executable (first time only)
+chmod +x ./uv.sh
+
+# Start all services
+./uv.sh start
+
+# Check status
+./uv.sh status
+
+# View all access points
+./uv.sh access
+
+# Get help
+./uv.sh help
+```
+
+### Reset Operations
+```bash
+# Quick daily reset (recommended for development)
+./uv.sh dev-reset              # Creates backup + resets database + bootstraps
+
+# Complete fresh start
+./uv.sh fresh-start            # Complete clean environment with backup
+
+# Individual reset options
+./uv.sh reset-database         # Database only
+./uv.sh reset-uploads          # Files only
+./uv.sh reset-schema           # Schema only
+./uv.sh reset-all              # Everything (nuclear option)
+```
+
+### Database Operations
+```bash
+# Backup and restore
+./uv.sh db-backup              # Create timestamped backup
+./uv.sh db-restore backup.sql  # Restore from backup
+
+# Bootstrap fresh database
+./uv.sh bootstrap
+```
+
+### Schema Management
+```bash
+# Export current schema
+./uv.sh schema-export
+
+# Apply schema from file
+./uv.sh schema-apply schema/production.yaml
+```
+
+**📚 For detailed reset options and safety features, see [RESET_GUIDE.md](RESET_GUIDE.md)**
 
 ## 🛠 Development Workflow
 
@@ -207,17 +267,23 @@ docker compose restart directus && docker compose logs -f directus
 
 ### Reset Environment
 
+For comprehensive reset options with safety features, use the helper script:
+
 ```bash
-# Stop all services
-docker compose down
+# Recommended: Quick development reset (creates backup automatically)
+./uv.sh dev-reset
 
-# Remove all data (⚠️ DESTRUCTIVE - loses all data)
+# Complete fresh start (safest option)
+./uv.sh fresh-start
+
+# Manual Docker reset (⚠️ DESTRUCTIVE - loses all data)
+docker compose down -v
 sudo rm -rf data/
-
-# Recreate and restart
 mkdir -p data/{database,minio}
 docker compose up -d
 ```
+
+**💡 Pro Tip:** Use `./uv.sh help` to see all available reset options with different safety levels.
 
 ## 📈 Production Notes
 
