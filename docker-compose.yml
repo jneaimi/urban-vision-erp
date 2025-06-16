@@ -1,0 +1,188 @@
+name: urban-vision-erp
+
+services:
+  # PostgreSQL Database with PostGIS for geospatial support
+  database:
+    container_name: uv-erp-database
+    image: postgis/postgis:13-3.4-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: directus
+      POSTGRES_DB: directus
+    healthcheck:
+      test: ["CMD", "pg_isready", "--host=localhost", "--username=directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 30s
+    networks:
+      - uv-erp-network
+
+  # Redis Cache for performance
+  cache:
+    container_name: uv-erp-cache
+    image: redis:6-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(redis-cli ping) = 'PONG' ]"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_interval: 5s
+      start_period: 30s
+    networks:
+      - uv-erp-network
+
+  # Directus CMS
+  directus:
+    container_name: uv-erp-directus
+    image: directus/directus:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8055:8055"
+    volumes:
+      # Persistent storage for uploads
+      - ./uploads:/directus/uploads
+      # Extensions directory for custom extensions
+      - ./extensions:/directus/extensions
+      # Schema snapshots and migrations
+      - ./schema:/directus/schema
+      # Database migrations
+      - ./migrations:/directus/migrations
+      # Database backups
+      - ./backups:/directus/backups
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    networks:
+      - uv-erp-network
+    environment:
+      # Security Keys (Generated for this project)
+      KEY: "c6274b2503e4d6d42689c725e5969fbdd266d697b47e285ce03192790acf6d35"
+      SECRET: "bbf1e18a3f30d68f511ba4e3f3f69cf842fba89aca03f2b2583f88ccb2df861f"
+      
+      # Database Configuration
+      DB_CLIENT: "${DB_CLIENT}"
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      
+      # Cache Configuration
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_STORE: "redis"
+      REDIS: "redis://cache:6379"
+      
+      # Initial Admin User
+      ADMIN_EMAIL: "admin@urbanvision.com"
+      ADMIN_PASSWORD: "urbanvision123"
+      
+      # Development Features
+      EXTENSIONS_AUTO_RELOAD: "true"
+      WEBSOCKETS_ENABLED: "true"
+      WEBSOCKETS_HEARTBEAT_ENABLED: "true"
+      
+      # CORS Configuration for Frontend Development
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:3000,http://localhost:5173,http://localhost:4200,http://localhost:8080"
+      CORS_CREDENTIALS: "true"
+      
+      # Content Security Policy for iframe embedding
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: "'self' http://localhost:* https://localhost:*"
+      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC: "'self' 'unsafe-eval' 'unsafe-inline'"
+      
+      # Email Configuration (MailDev for development)
+      EMAIL_FROM: "noreply@urbanvision.com"
+      EMAIL_TRANSPORT: "smtp"
+      EMAIL_SMTP_HOST: "maildev"
+      EMAIL_SMTP_PORT: "1025"
+      
+      # Public URL for development
+      PUBLIC_URL: "http://localhost:8055"
+      
+      # File Storage Configuration
+      STORAGE_LOCATIONS: "local"
+      STORAGE_LOCAL_DRIVER: "local"
+      STORAGE_LOCAL_ROOT: "./uploads"
+      
+      # Security headers for development
+      FORCE_HTTPS: "false"
+      SERVE_APP: "true"
+      
+      # Rate limiting (relaxed for development)
+      RATE_LIMITER_ENABLED: "false"
+
+      # QuickBooks Integration Environment Variables
+      QB_CONSUMER_KEY: ""
+      QB_CONSUMER_SECRET: ""
+      QB_ACCESS_TOKEN: ""
+      QB_ACCESS_TOKEN_SECRET: ""
+      QB_COMPANY_ID: ""
+      QB_SANDBOX: "true"
+      
+      # DocuSeal Integration Environment Variables
+      DOCUSEAL_API_URL: "https://api.docuseal.co"
+      DOCUSEAL_API_KEY: ""
+
+  # MailDev for email testing in development
+  maildev:
+    container_name: uv-erp-maildev
+    image: maildev/maildev:latest
+    restart: unless-stopped
+    ports:
+      - "1080:1080"  # Web interface
+      - "1025:1025"  # SMTP server
+    networks:
+      - uv-erp-network
+
+  # MinIO for S3-compatible storage testing
+  minio:
+    container_name: uv-erp-minio
+    image: minio/minio:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console
+    volumes:
+      - ./data/minio:/data
+    environment:
+      MINIO_ROOT_USER: "urbanvision"
+      MINIO_ROOT_PASSWORD: "urbanvision123"
+    command: server /data --console-address ":9001"
+    networks:
+      - uv-erp-network
+
+  # Adminer for database management
+  adminer:
+    container_name: uv-erp-adminer
+    image: adminer:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: database
+      ADMINER_DESIGN: "pappu687"
+    networks:
+      - uv-erp-network
+
+networks:
+  uv-erp-network:
+    driver: bridge
+
+volumes:
+  database_data:
+  minio_data:

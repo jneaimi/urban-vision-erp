@@ -1,0 +1,47 @@
+{
+  "name": "urban-vision-erp",
+  "version": "1.0.0",
+  "description": "Urban Vision ERP System built on Directus CMS with QuickBooks and DocuSeal integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "./uv.sh start",
+    "stop": "./uv.sh stop",
+    "restart": "./uv.sh restart",
+    "status": "./uv.sh status",
+    "logs": "./uv.sh logs",
+    "bootstrap": "./uv.sh bootstrap",
+    "backup": "./uv.sh db-backup",
+    "schema:export": "./uv.sh schema-export",
+    "migration:create": "./uv.sh migration-create",
+    "migration:run": "./uv.sh migration-run",
+    "access": "./uv.sh access",
+    "dev": "docker compose up -d && docker compose logs -f directus"
+  },
+  "keywords": [
+    "erp",
+    "directus",
+    "urban-vision",
+    "construction",
+    "project-management",
+    "quickbooks",
+    "docuseal"
+  ],
+  "author": "Urban Vision ERP Team",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@directus/cli": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urban-vision/erp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/urban-vision/erp/issues"
+  },
+  "homepage": "https://github.com/urban-vision/erp#readme"
+}
