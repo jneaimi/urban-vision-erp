@@ -420,6 +420,11 @@ help() {
     echo "  fresh-start        Complete reset + bootstrap (with backup)"
     echo "  dev-reset          Quick development reset (backup + reset + bootstrap)"
     echo ""
+    echo "Production Deployment:"
+    echo "  deploy-schema      Export and push schema to production"
+    echo "  deploy-db          Push database to production (use with caution!)"
+    echo "  deploy-all         Deploy schema + uploads to production"
+    echo ""
     echo "Information:"
     echo "  access             Show all access points and credentials"
     echo "  help               Show this help message"
@@ -486,6 +491,15 @@ case "${1:-help}" in
         ;;
     access)
         access
+        ;;
+    deploy-schema)
+        ./deploy-production.sh push-schema "$2"
+        ;;
+    deploy-db)
+        ./deploy-production.sh push-db "$2"
+        ;;
+    deploy-all)
+        ./deploy-production.sh deploy
         ;;
     help|--help|-h)
         help
