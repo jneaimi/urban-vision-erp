@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/database:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: directus
       POSTGRES_PASSWORD: directus
@@ -55,10 +55,8 @@ services:
       - ./uploads:/directus/uploads
       # Extensions directory for custom extensions
       - ./extensions:/directus/extensions
-      # Schema snapshots and migrations
+      # Schema snapshots
       - ./schema:/directus/schema
-      # Database migrations
-      - ./migrations:/directus/migrations
       # Database backups
       - ./backups:/directus/backups
     depends_on:
@@ -158,7 +156,7 @@ services:
       - "9000:9000"  # API
       - "9001:9001"  # Console
     volumes:
-      - ./data/minio:/data
+      - minio_data:/data
     environment:
       MINIO_ROOT_USER: "urbanvision"
       MINIO_ROOT_PASSWORD: "urbanvision123"

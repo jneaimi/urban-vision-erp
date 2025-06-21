@@ -109,16 +109,16 @@ bootstrap() {
 db_backup() {
     # Ensure backup directory exists
     mkdir -p backups
-    
+
     BACKUP_FILE="backups/backup-$(date +%Y%m%d_%H%M%S).sql"
     log_info "Creating database backup..."
-    
+
     # Check if database is ready
     if ! docker exec $DATABASE_CONTAINER pg_isready -U directus >/dev/null 2>&1; then
         log_error "Database is not ready. Please ensure services are running."
         return 1
     fi
-    
+
     # Create backup with proper error handling
     if docker exec $DATABASE_CONTAINER pg_dump -U directus directus > "$BACKUP_FILE" 2>/dev/null; then
         log_success "Database backed up to $BACKUP_FILE"
@@ -150,29 +150,29 @@ db_restore() {
     read -r response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         log_info "Restoring database from $1..."
-        
+
         # Stop Directus to prevent connections
         log_info "Stopping Directus to prevent active connections..."
         docker compose stop directus
-        
+
         # Wait for container to fully stop
         sleep 2
-        
+
         # Drop and recreate database to ensure clean restore
         log_info "Preparing database for restore..."
         docker exec $DATABASE_CONTAINER psql -U directus -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'directus' AND pid <> pg_backend_pid();" postgres >/dev/null 2>&1
         docker exec $DATABASE_CONTAINER psql -U directus postgres -c "DROP DATABASE IF EXISTS directus;" >/dev/null 2>&1
         docker exec $DATABASE_CONTAINER psql -U directus postgres -c "CREATE DATABASE directus;" >/dev/null 2>&1
-        
+
         # Restore the backup with progress indication
         log_info "Restoring data (this may take a moment)..."
         if cat "$1" | docker exec -i $DATABASE_CONTAINER psql -U directus directus >/dev/null 2>&1; then
             log_success "Database restored successfully"
-            
+
             # Restart Directus
             log_info "Starting Directus..."
             docker compose start directus
-            
+
             # Wait for Directus to be fully ready
             log_info "Waiting for Directus to be ready..."
             local retries=30
@@ -184,7 +184,7 @@ db_restore() {
                 retries=$((retries - 1))
                 sleep 2
             done
-            
+
             if [ $retries -eq 0 ]; then
                 log_warning "Directus took longer than expected to start. Check logs with 'uv logs directus'"
             fi
@@ -219,31 +219,8 @@ schema_apply() {
     fi
 
     log_info "Applying schema from $1..."
-    docker exec $DIRECTUS_CONTAINER npx directus schema apply "/directus/$1"
+    docker exec $DIRECTUS_CONTAINER npx directus schema apply --yes "/directus/$1"
     log_success "Schema applied successfully"
-}
-
-# Migration operations
-migration_create() {
-    if [ -z "$1" ]; then
-        log_error "Please specify migration name: uv migration-create <migration_name>"
-        exit 1
-    fi
-
-    log_info "Creating migration: $1"
-    docker exec $DIRECTUS_CONTAINER npx directus database migrate:make "$1"
-    log_success "Migration created successfully"
-}
-
-migration_run() {
-    log_info "Running pending migrations..."
-    docker exec $DIRECTUS_CONTAINER npx directus database migrate:latest
-    log_success "Migrations completed"
-}
-
-migration_status() {
-    log_info "Migration status:"
-    docker exec $DIRECTUS_CONTAINER npx directus database migrate:status
 }
 
 # Reset operations
@@ -258,7 +235,6 @@ reset_database() {
 
         log_info "Removing database volume..."
         docker volume rm ${PROJECT_NAME}_database_data 2>/dev/null || true
-        rm -rf data/database/* 2>/dev/null || true
 
         log_info "Starting services..."
         docker compose up -d database cache
@@ -330,14 +306,8 @@ reset_all() {
         rm -rf uploads/*
         mkdir -p uploads
 
-        log_info "Removing database data..."
-        rm -rf data/database/*
-
-        log_info "Removing cache data..."
-        rm -rf data/minio/*
-
         log_info "Creating fresh directories..."
-        mkdir -p {data/database,data/minio,uploads,backups}
+        mkdir -p {uploads,backups}
 
         log_info "Starting services..."
         docker compose up -d
@@ -358,7 +328,7 @@ fresh_start() {
         # Check if database has tables
         TABLE_COUNT=$(docker exec $DATABASE_CONTAINER psql -U directus -d directus -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public';" 2>/dev/null || echo "0")
         TABLE_COUNT=$(echo $TABLE_COUNT | tr -d ' ')
-        
+
         if [ "$TABLE_COUNT" -gt "0" ]; then
             log_info "Creating backup before fresh start..."
             db_backup
@@ -388,7 +358,7 @@ dev_reset() {
         # Check if database has tables
         TABLE_COUNT=$(docker exec $DATABASE_CONTAINER psql -U directus -d directus -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public';" 2>/dev/null || echo "0")
         TABLE_COUNT=$(echo $TABLE_COUNT | tr -d ' ')
-        
+
         if [ "$TABLE_COUNT" -gt "0" ]; then
             db_backup
         fi
@@ -441,11 +411,6 @@ help() {
     echo "Schema Management:"
     echo "  schema-export      Export current schema"
     echo "  schema-apply <file> Apply schema from file"
-    echo ""
-    echo "Migration Management:"
-    echo "  migration-create <name>  Create new migration"
-    echo "  migration-run            Run pending migrations"
-    echo "  migration-status         Show migration status"
     echo ""
     echo "Reset Operations:"
     echo "  reset-database     Reset database (removes all data)"
@@ -500,15 +465,6 @@ case "${1:-help}" in
         ;;
     schema-apply)
         schema_apply "$2"
-        ;;
-    migration-create)
-        migration_create "$2"
-        ;;
-    migration-run)
-        migration_run
-        ;;
-    migration-status)
-        migration_status
         ;;
     reset-database)
         reset_database
