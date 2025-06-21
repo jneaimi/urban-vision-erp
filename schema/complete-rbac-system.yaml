@@ -1,0 +1,2166 @@
+version: 1
+directus: 11.8.0
+vendor: postgres
+collections:
+  - collection: leads
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: archived
+      collapse: open
+      collection: leads
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: sort
+      translations: null
+      unarchive_value: draft
+      versioning: false
+    schema:
+      name: leads
+fields:
+  - collection: leads
+    field: id
+    type: uuid
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: leads
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: status
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - color: '#2196F3'
+            text: 🆕 New Lead
+            value: new
+          - color: '#4CAF50'
+            text: ✅ Qualified
+            value: qualified
+          - color: '#FF9800'
+            text: 📋 Proposal Sent
+            value: proposal
+          - color: '#9C27B0'
+            text: 🤝 In Negotiation
+            value: negotiation
+          - color: '#4CAF50'
+            text: 🎉 Won
+            value: won
+          - color: '#F44336'
+            text: ❌ Lost
+            value: lost
+          - color: '#757575'
+            text: ⏸️ On Hold
+            value: on_hold
+        showAsDot: true
+      field: status
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - color: '#2196F3'
+            text: 🆕 New Lead
+            value: new
+          - color: '#4CAF50'
+            text: ✅ Qualified
+            value: qualified
+          - color: '#FF9800'
+            text: 📋 Proposal Sent
+            value: proposal
+          - color: '#9C27B0'
+            text: 🤝 In Negotiation
+            value: negotiation
+          - color: '#4CAF50'
+            text: 🎉 Won
+            value: won
+          - color: '#F44336'
+            text: ❌ Lost
+            value: lost
+          - color: '#757575'
+            text: ⏸️ On Hold
+            value: on_hold
+      readonly: false
+      required: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: leads
+      data_type: character varying
+      default_value: new
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: sort
+    type: integer
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: leads
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: user_created
+    type: uuid
+    meta:
+      collection: leads
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: 13
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: leads
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: leads
+    field: date_created
+    type: timestamp
+    meta:
+      collection: leads
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 14
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: leads
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: user_updated
+    type: uuid
+    meta:
+      collection: leads
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      sort: 15
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: leads
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: leads
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: leads
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 16
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: leads
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: lead_number
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: lead_number
+      group: null
+      hidden: false
+      interface: input
+      note: Auto-generated unique identifier
+      options:
+        iconLeft: nest_locator_tag
+        placeholder: Auto-generated (LEAD-YYYYMMDD-XXX)
+      readonly: true
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: lead_number
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: customer_info
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: customer_info
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#2196F3'
+        headerIcon: personal_injury
+      readonly: false
+      required: false
+      sort: 4
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: customer_name
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: customer_name
+      group: customer_info
+      hidden: false
+      interface: input
+      note: Full customer or company name
+      options:
+        clear: true
+        iconLeft: add_business
+        placeholder: Enter customer or company name
+        trim: true
+      readonly: false
+      required: true
+      sort: 1
+      special: null
+      translations: null
+      validation:
+        _and:
+          - customer_name:
+              _nnull: true
+      validation_message: null
+      width: full
+    schema:
+      name: customer_name
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: contact_person
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_person
+      group: customer_info
+      hidden: false
+      interface: input
+      note: Primary contact person if different from customer name
+      options:
+        iconLeft: personal_injury
+        placeholder: Contact person name (if different)
+        trim: true
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: contact_person
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: contact_title
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_title
+      group: customer_info
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: work
+        placeholder: e.g., CEO, Project Manager, Procurement Head
+        trim: true
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: contact_title
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: communication_details
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: communication_details
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#FF9800'
+        headerIcon: contact_mail
+      readonly: false
+      required: false
+      sort: 5
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: customer_email
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: customer_email
+      group: communication_details
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: attach_email
+        placeholder: customer@company.ae
+        trim: true
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation:
+        _and:
+          - customer_email:
+              _regex: ^[^@]+@[^@]+\.[^@]+$
+      validation_message: null
+      width: half
+    schema:
+      name: customer_email
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: secondary_email
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: secondary_email
+      group: communication_details
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: alternate_email
+        placeholder: Alternative email (optional)
+        trim: true
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation:
+        _and:
+          - customer_email:
+              _regex: ^[^@]+@[^@]+\.[^@]+$
+      validation_message: null
+      width: half
+    schema:
+      name: secondary_email
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: customer_phone
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: customer_phone
+      group: communication_details
+      hidden: false
+      interface: input
+      note: 'UAE format: +971 XX XXX XXXX'
+      options:
+        iconLeft: perm_phone_msg
+        placeholder: +971 50 123 4567
+        trim: true
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation:
+        _and:
+          - customer_phone:
+              _regex: ^(\+971|0)[0-9]{8,9}$
+      validation_message: null
+      width: half
+    schema:
+      name: customer_phone
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: whatsapp_number
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: whatsapp_number
+      group: communication_details
+      hidden: false
+      interface: input
+      note: 'UAE format: +971 XX XXX XXXX'
+      options:
+        iconLeft: chat
+        placeholder: +971 50 123 4567 (if different)
+        trim: true
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation:
+        _and:
+          - customer_phone:
+              _regex: ^(\+971|0)[0-9]{8,9}$
+      validation_message: null
+      width: half
+    schema:
+      name: whatsapp_number
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: preferred_communication
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: preferred_communication
+      group: communication_details
+      hidden: false
+      interface: select-radio
+      note: null
+      options:
+        choices:
+          - text: 📧 Email
+            value: email
+          - text: 📞 Phone Call
+            value: phone
+          - text: 💬 WhatsApp
+            value: whatsapp
+          - text: 👥 In Person
+            value: in_person
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: preferred_communication
+      table: leads
+      data_type: character varying
+      default_value: email
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: customer_address
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: customer_address
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#4CAF50'
+        headerIcon: location_on
+      readonly: false
+      required: false
+      sort: 6
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: street_address
+    type: text
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: street_address
+      group: customer_address
+      hidden: false
+      interface: input-multiline
+      note: null
+      options:
+        placeholder: Building name, flat/office number, street name
+        trim: true
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: street_address
+      table: leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: area_district
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: area_district
+      group: customer_address
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        allowOther: true
+        choices:
+          - text: Al Reem Island
+            value: al_reem_island
+          - text: Al Raha
+            value: al_raha
+          - text: Corniche Area
+            value: corniche_area
+        placeholder: Select or type area/district
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: area_district
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: emirate
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: raw
+      display_options: null
+      field: emirate
+      group: customer_address
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: 🏛️ Abu Dhabi
+            value: abu_dhabi
+          - text: 🏙️ Dubai
+            value: dubai
+          - text: 🏢 Sharjah
+            value: sharjah
+          - text: 🏘️ Ajman
+            value: ajman
+          - text: 🌊 Ras Al Khaimah
+            value: ras_al_khaimah
+          - text: 🏔️ Fujairah
+            value: fujairah
+          - text: 🏖️ Umm Al Quwain
+            value: umm_al_quwain
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: emirate
+      table: leads
+      data_type: character varying
+      default_value: abu_dhabi
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: po_box
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: po_box
+      group: customer_address
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: markunread_mailbox
+        placeholder: PO Box number (optional)
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: po_box
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: postal_code
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: postal_code
+      group: customer_address
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: local_post_office
+        placeholder: '00000'
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation:
+        _and:
+          - postal_code:
+              _regex: ^[0-9]{5}$
+      validation_message: null
+      width: half
+    schema:
+      name: postal_code
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 5
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: country
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: country
+      group: customer_address
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: 🇦🇪 United Arab Emirates
+            value: AE
+          - text: 🇸🇦 Saudi Arabia
+            value: SA
+          - text: 🇴🇲 Oman
+            value: OM
+          - text: 🇶🇦 Qatar
+            value: QA
+          - text: 🇰🇼 Kuwait
+            value: KW
+          - text: 🇧🇭 Bahrain
+            value: BH
+          - text: 🌍 Other
+            value: other
+      readonly: false
+      required: false
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: country
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: business_info
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: business_info
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#9C27B0'
+        headerIcon: business_center
+      readonly: false
+      required: false
+      sort: 7
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: company_type
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: company_type
+      group: business_info
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: 🏢 Large Corporation
+            value: large_corporation
+          - text: 🏬 SME (Small-Medium Enterprise)
+            value: sme
+          - text: 👤 Individual/Freelancer
+            value: individual
+          - text: 🏛️ Government Entity
+            value: government
+          - text: 🏫 Semi-Government
+            value: semi_government
+          - text: 🌍 International Company
+            value: international
+          - text: 🏗️ Construction Company
+            value: construction
+          - text: 🏭 Real Estate Developer
+            value: real_estate
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: company_type
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: industry_sector
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: industry_sector
+      group: business_info
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        allowOther: true
+        choices:
+          - text: 🏗️ Construction
+            value: construction
+          - text: 🏢 Real Estate
+            value: real_estate
+          - text: 🏭 Manufacturing
+            value: manufacturing
+          - text: ⚡ Oil & Gas
+            value: oil_gas
+          - text: 💰 Banking & Finance
+            value: banking_finance
+          - text: 🏥 Healthcare
+            value: healthcare
+          - text: 🎓 Education
+            value: education
+          - text: 🛒 Retail
+            value: retail
+          - text: 🚛 Logistics
+            value: logistics
+          - text: 💻 Technology
+            value: technology
+          - text: 🏛️ Government
+            value: government
+          - text: ✈️ Aviation
+            value: aviation
+          - text: 🏨 Hospitality
+            value: hospitality
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: industry_sector
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: trade_license
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: trade_license
+      group: business_info
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: verified
+        placeholder: Trade license number (optional)
+        trim: true
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: trade_license
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: vat_number
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: vat_number
+      group: business_info
+      hidden: false
+      interface: input
+      note: 15-digit UAE VAT registration number
+      options:
+        iconLeft: receipt
+        placeholder: 100123456700003 (UAE VAT format)
+        trim: true
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation:
+        _and:
+          - vat_number:
+              _regex: ^[0-9]{15}$
+      validation_message: null
+      width: half
+    schema:
+      name: vat_number
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: marketing_info
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: marketing_info
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#FF5722'
+        headerIcon: campaign
+      readonly: false
+      required: false
+      sort: 8
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: lead_source
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: lead_source
+      group: marketing_info
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: 🌐 Company Website
+            value: website
+          - text: 👥 Personal Referral
+            value: referral
+          - text: 📞 Cold Call
+            value: cold_call
+          - text: 📧 Email Campaign
+            value: email_campaign
+          - text: 💼 LinkedIn
+            value: linkedin
+          - text: 🏢 Trade Show/Exhibition
+            value: trade_show
+          - text: 🤝 Business Network
+            value: business_network
+          - text: 🏛️ Government Portal
+            value: government_portal
+          - text: 🏗️ Construction Forum
+            value: construction_forum
+          - text: 📰 Advertisement
+            value: advertisement
+          - text: 🎯 Google Ads
+            value: google_ads
+          - text: 📱 Social Media
+            value: social_media
+          - text: 🏢 Existing Customer
+            value: existing_customer
+          - text: ❓ Other
+            value: other
+      readonly: false
+      required: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: lead_source
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: referral_source
+    type: string
+    meta:
+      collection: leads
+      conditions:
+        - hidden: false
+          name: If Referral
+          required: true
+          rule:
+            _and:
+              - lead_source:
+                  _eq: referral
+        - hidden: true
+          name: if not referral
+          rule:
+            _and:
+              - lead_source:
+                  _neq: referral
+      display: null
+      display_options: null
+      field: referral_source
+      group: marketing_info
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: person_add
+        placeholder: Who referred this lead?
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: referral_source
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: campaign_name
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: campaign_name
+      group: marketing_info
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: adversal
+        placeholder: Marketing campaign name (if applicable)
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: campaign_name
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: lead_score
+    type: integer
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: lead_score
+      group: marketing_info
+      hidden: false
+      interface: slider
+      note: Lead quality score (0-100)
+      options:
+        alwaysShowValue: true
+        maxValue: 100
+        minValue: 0
+        stepInterval: 2
+      readonly: true
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: lead_score
+      table: leads
+      data_type: integer
+      default_value: 50
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: project_details
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: project_details
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#795548'
+        headerIcon: construction
+      readonly: false
+      required: false
+      sort: 9
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: project_type
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: project_type
+      group: project_details
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        allowOther: true
+        choices:
+          - text: 🏠 Residential Building
+            value: residential
+          - text: 🏢 Commercial Building
+            value: commercial
+          - text: 🏭 Industrial Facility
+            value: industrial
+          - text: 🏥 Healthcare Facility
+            value: healthcare
+          - text: 🎓 Educational Facility
+            value: education
+          - text: 🏨 Hospitality Project
+            value: hospitality
+          - text: 🏛️ Government Building
+            value: government
+          - text: 🌉 Infrastructure
+            value: infrastructure
+          - text: 🔄 Renovation/Fit-out
+            value: renovation
+          - text: 🏗️ Mixed-Use Development
+            value: mixed_use
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: project_type
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: project_location
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: project_location
+      group: project_details
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: place_item
+        placeholder: Project location/area (if known)
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: project_location
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: estimated_value
+    type: decimal
+    meta:
+      collection: leads
+      conditions: null
+      display: formatted-value
+      display_options:
+        prefix: AED
+        suffix: null
+      field: estimated_value
+      group: project_details
+      hidden: false
+      interface: input
+      note: Estimated project value in AED
+      options:
+        iconLeft: attach_money
+        placeholder: '0'
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: estimated_value
+      table: leads
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 5
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: budget_range
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: budget_range
+      group: project_details
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: 💰 Under AED 100K
+            value: under_100k
+          - text: 💰💰 AED 100K - 500K
+            value: 100k_500k
+          - text: 💰💰💰 AED 500K - 1M
+            value: 500k_1m
+          - text: 💰💰💰💰 AED 1M - 5M
+            value: 1m_5m
+          - text: 💰💰💰💰💰 AED 5M+
+            value: over_5m
+          - text: ❓ To Be Determined
+            value: tbd
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: budget_range
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: project_urgency
+    type: string
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: project_urgency
+      group: project_details
+      hidden: false
+      interface: select-radio
+      note: null
+      options:
+        choices:
+          - text: 🔥 Urgent (Within 1 month)
+            value: urgent
+          - text: ⚡ High Priority (1-3 months)
+            value: high
+          - text: 📅 Medium Priority (3-6 months)
+            value: medium
+          - text: ⏰ Low Priority (6+ months)
+            value: low
+          - text: 📋 Planning Phase
+            value: planning
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: project_urgency
+      table: leads
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: expected_close_date
+    type: dateTime
+    meta:
+      collection: leads
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: expected_close_date
+      group: project_details
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: expected_close_date
+      table: leads
+      data_type: timestamp without time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: probability
+    type: integer
+    meta:
+      collection: leads
+      conditions: null
+      display: formatted-value
+      display_options:
+        suffix: '%'
+      field: probability
+      group: project_details
+      hidden: false
+      interface: slider
+      note: null
+      options:
+        alwaysShowValue: true
+        maxValue: 100
+        minValue: 0
+        stepInterval: 10
+      readonly: false
+      required: false
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: probability
+      table: leads
+      data_type: integer
+      default_value: 50
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: requirements
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: requirements
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#607D8B'
+        headerIcon: list_alt
+      readonly: false
+      required: false
+      sort: 10
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: leads
+    field: description
+    type: text
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: requirements
+      hidden: false
+      interface: input-rich-text-html
+      note: Describe the project requirements, scope, and any specific details...
+      options:
+        toolbar:
+          - bold
+          - italic
+          - underline
+          - h3
+          - h4
+          - h5
+          - numlist
+          - bullist
+          - blockquote
+          - customLink
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: leads
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: specific_requirements
+    type: json
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: specific_requirements
+      group: requirements
+      hidden: false
+      interface: list
+      note: null
+      options:
+        addLabel: Add Requirement
+        fields:
+          - field: requirement_type
+            meta:
+              field: requirement_type
+              interface: select-dropdown
+              options:
+                choices:
+                  - text: Technical Specification
+                    value: technical
+                  - text: Timeline Requirement
+                    value: timeline
+                  - text: Budget Constraint
+                    value: budget
+                  - text: Quality Standard
+                    value: quality
+                  - text: Compliance Requirement
+                    value: compliance
+                  - text: Special Feature
+                    value: feature
+              type: string
+              width: half
+            name: requirement_type
+            type: string
+          - field: description
+            meta:
+              field: description
+              interface: input-multiline
+              type: text
+              width: half
+            name: description
+            type: text
+        template: '{{requirement_type}}: {{description}}'
+      readonly: false
+      required: false
+      sort: 2
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: specific_requirements
+      table: leads
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: leads
+    field: assignment_info
+    type: alias
+    meta:
+      collection: leads
+      conditions: null
+      display: null
+      display_options: null
+      field: assignment_info
+      group: null
+      hidden: false
+      interface: group-detail
+      note: null
+      options:
+        headerColor: '#3F51B5'
+        headerIcon: assignment_ind
+      readonly: false
+      required: false
+      sort: 11
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+relations:
+  - collection: leads
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: leads
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: leads
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: leads_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: leads
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: leads
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: leads
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: leads_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
